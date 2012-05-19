@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\", "{1D62504D-CF16-4354-81C0-D0DA0025C0AF}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "2.0"
+		Debug.AspNetCompiler.VirtualPath = "/daWeb"
+		Debug.AspNetCompiler.PhysicalPath = "D:\工作\daWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\daWeb\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/daWeb"
+		Release.AspNetCompiler.PhysicalPath = "D:\工作\daWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\daWeb\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "9422"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.Build.0 = Debug|.NET
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
