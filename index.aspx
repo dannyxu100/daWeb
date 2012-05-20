@@ -8,7 +8,7 @@
     <script src="js/daLoader_source.js" type="text/javascript"></script>
     <script>
         debugger;
-        daLoader("da", function(){
+        daLoader("da,daDrag", function(){
             da.out("加载成功");
         
         });
