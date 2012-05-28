@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\", "{1D62504D-CF16-4354-81C0-D0DA0025C0AF}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "2.0"
+		ProjectReferences = "{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}|daDB.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/daWeb"
 		Debug.AspNetCompiler.PhysicalPath = "D:\工作\daWeb\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\daWeb\"
@@ -22,13 +23,38 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\",
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "daDB", "..\daDB\daDB\daDB.csproj", "{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|.NET = Release|.NET
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.ActiveCfg = Debug|.NET
 		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.Build.0 = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Any CPU.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Mixed Platforms.Build.0 = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|.NET.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|.NET.Build.0 = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Any CPU.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
+		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Release|.NET.ActiveCfg = Release|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
