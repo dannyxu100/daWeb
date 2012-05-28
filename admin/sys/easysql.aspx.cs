@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Configuration;
 using System.Data;
+using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
 
 //引用
 using System.Text;
@@ -15,7 +17,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using daDB;
 
-public partial class admin_sys_easysql : System.Web.UI.Page
+public partial class admin_sys_sqlmanage_easysql : System.Web.UI.Page
 {
     private DBHelper_SQL _dbhelper;         //数据库操作对象
     private string _sqlname;                //参数变量

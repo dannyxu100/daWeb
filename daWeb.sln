@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\", "{1D62504D-CF16-4354-81C0-D0DA0025C0AF}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\", "{97DF1C19-90B8-413A-AA2E-6B7311C10F85}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFramework = "2.0"
+		TargetFramework = "3.5"
 		ProjectReferences = "{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}|daDB.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/daWeb"
 		Debug.AspNetCompiler.PhysicalPath = "D:\工作\daWeb\"
@@ -19,11 +19,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "daWeb", "D:\工作\daWeb\",
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "9422"
+		VWDPort = "30809"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "daDB", "..\daDB\daDB\daDB.csproj", "{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "daDB", "D:\工作\daDB\daDB\daDB.csproj", "{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,16 +35,16 @@ Global
 		Release|Mixed Platforms = Release|Mixed Platforms
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|.NET.Build.0 = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Any CPU.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Debug|Mixed Platforms.Build.0 = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|.NET.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|.NET.Build.0 = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Any CPU.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
-		{1D62504D-CF16-4354-81C0-D0DA0025C0AF}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Debug|.NET.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Debug|.NET.Build.0 = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Debug|Any CPU.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Debug|Mixed Platforms.Build.0 = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Release|.NET.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Release|.NET.Build.0 = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Release|Any CPU.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
+		{97DF1C19-90B8-413A-AA2E-6B7311C10F85}.Release|Mixed Platforms.Build.0 = Debug|.NET
 		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA66CF24-0B4E-4D4F-A068-3F01E3F4DB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
