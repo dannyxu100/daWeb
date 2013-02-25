@@ -173,11 +173,16 @@ var daWin = (function(){
 			};
 			
 			this.isDialog = ( "" === setting.url ) ? true : false;		//如果没有内页url地址，说明就是对话框模式
-			if( !setting.modal )	setting.modal = this.isDialog;
+			if( !setting.modal ){
+				setting.modal = this.isDialog;
+			}
 			
 			setting.act = "undefined" != typeof daFx && setting.act;
 //			setting.place = setting.place || { top: window.daMouseY || 0, left: window.daMouseX || 0 };
-			setting.place = setting.place || { left: (da(win).width()-this.dwCssSize.win_w)/2, top: (da(win).height()-this.dwCssSize.win_h)/2 };
+			setting.place = setting.place || { 
+				left: (da(win).width()-this.dwCssSize.win_w)/2, 
+				top: (da(win).height()-this.dwCssSize.win_h)/2 
+			};
 
 			this.dwDlgBts = [];											//对话框功能按钮dom对象集合
 			
@@ -336,8 +341,8 @@ var daWin = (function(){
 			if( this.isDialog ){														//如果是对话框模式，需要先填充内容，再执行改变窗体尺寸位置的动画
 				this.setCnt( setting );
 			}
-//			else
-//				this.hideCnt();
+			else
+				this.hideCnt();
 			
 			if( !setting.act ){
 					this.setSize( this.dwSize.w, this.dwSize.h );
@@ -349,58 +354,58 @@ var daWin = (function(){
 					}
 			}
 			else if( setting.act && "image" != setting.type ){
-					var context = this,
-//							nowPos = {l:null,t:null},
-							nowSize = {w:null,h:null};
+				var context = this,
+//					nowPos = {l:null,t:null},
+					nowSize = {w:null,h:null};
 					
-          this.setSize( 0, 0 );
-					this.setPos( setting.place.top, null, null, setting.place.left );
+				this.setSize( 0, 0 );
+				this.setPos( setting.place.top, null, null, setting.place.left );
 					
-          da(this.dwPad).act({
-							top: ( da(win).height() - this.dwSize.h )/2,
-							left: ( da(win).width() - this.dwSize.w )/2,
-              width: this.dwSize.w,
-              height: this.dwSize.h
-          },
-          {
-              duration: setting.time,
-              easing: setting.easing,
-              step: function(now, obj) {
-                  if (null === nowSize.w || null === nowSize.h) {
-                      if ("width" === obj.prop) nowSize.w = now;
-                      if ("height" === obj.prop) nowSize.h = now;
+				da(this.dwPad).act({
+					top: ( da(win).height() - this.dwSize.h )/2,
+					left: ( da(win).width() - this.dwSize.w )/2,
+					width: this.dwSize.w,
+					height: this.dwSize.h
+				},
+				{
+					duration: setting.time,
+					easing: setting.easing,
+					step: function(now, obj) {
+					  if (null === nowSize.w || null === nowSize.h) {
+						  if ("width" === obj.prop) nowSize.w = now;
+						  if ("height" === obj.prop) nowSize.h = now;
 
-                  } 
-                  else {
-                      context.setSize(nowSize.w, nowSize.h);
-                      nowSize.w = null;
-                      nowSize.h = null;
-                  }
+						} 
+						else {
+							context.setSize(nowSize.w, nowSize.h);
+							nowSize.w = null;
+							nowSize.h = null;
+						}
                   
-//                  if (null === nowPos.l || null === nowPos.t) {
-//                      if ("left" === obj.prop) nowPos.l = now;
-//                      if ("top" === obj.prop) nowPos.t = now;
-//
-//                  } 
-//                  else {
-//                      context.setPos(nowPos.t, null, null, nowPos.l);
-//                      nowPos.l = null;
-//                      nowPos.t = null;
-//                  }
-              },
-              complete: function(){
-									context.setSize( context.dwSize.w, context.dwSize.h );
-//									context.setPos( context.dwSize.top, context.dwSize.right, context.dwSize.bottom, context.dwSize.left );
+						// if (null === nowPos.l || null === nowPos.t) {
+						// if ("left" === obj.prop) nowPos.l = now;
+						// if ("top" === obj.prop) nowPos.t = now;
 
-									if( !context.isDialog ){
-										context.setCnt( setting );												//设置iframe
-             				context.showCnt();
-									}
-//									
-//									nowPos = null;
-									nowSize = null;
-              }
-          });
+						// } 
+						// else {
+							// context.setPos(nowPos.t, null, null, nowPos.l);
+							// nowPos.l = null;
+							// nowPos.t = null;
+						// }
+					},
+					complete: function(){
+						context.setSize( context.dwSize.w, context.dwSize.h );
+						//context.setPos( context.dwSize.top, context.dwSize.right, context.dwSize.bottom, context.dwSize.left );
+
+						if( !context.isDialog ){
+							context.setCnt( setting );			//设置iframe
+							context.showCnt();
+						}
+						//
+						//nowPos = null;
+						nowSize = null;
+					}
+				});
           
 			}
 			
@@ -1166,14 +1171,14 @@ var daWin = (function(){
 			nWidth =  0 > nWidth ? 0 : nWidth;								//纠正数据
 			nHeight =  0 > nHeight ? 0 : nHeight;
 			if( this.isDialog ){
-					dwIframe.style.display = "none";
-					
-					if( da.isArray( setting.html ) ){
-						this.imagesList = setting.html;
-						setting.html = "";
-					}
-					dwDialog.innerHTML = setting.html;
-					
+				dwIframe.style.display = "none";
+				
+				if( da.isArray( setting.html ) ){
+					this.imagesList = setting.html;
+					setting.html = "";
+				}
+				dwDialog.innerHTML = setting.html;
+				
 //				if( 0 === this.dwSize.w || 0 === this.dwSize.h ){					//在对话框模式，未传入width，height的时候，纠正位置，居中显示
 //						this.dwSize.w = da( this.dwPad ).width();
 //						this.dwSize.h = da( this.dwPad ).height();
@@ -1181,93 +1186,99 @@ var daWin = (function(){
 //						this.setPos(( da(win).height() - this.dwSize.h )/2, "auto", "auto", ( da(win).width() - this.dwSize.w )/2)
 //				}
 					
-					var btBar = doc.createElement("div"),
-							button = this.setting.button,
-							btObj;
+				var btBar = doc.createElement("div"),
+					button = this.setting.button,
+					btObj;
+						
+				btBar.className = "daWinBtBar";
+				dwDialog.insertBefore( btBar, null );
+				
+				if( null !== button ){
+						for( var caption in button ){
+							btObj = doc.createElement("a"),
+							btObj.className = "daWinBt";
+							btObj.href = "javascript:void(0)";
+							btObj.innerHTML = [
+								'<div class="l"></div>',
+								'<div class="txt">', caption, '</div>',
+								'<div class="r"></div>'
+							].join("");
 							
-					btBar.className = "daWinBtBar";
-					dwDialog.insertBefore( btBar, null );
-					
-					if( null !== button ){
-							for( var caption in button ){
-								btObj = doc.createElement("a"),
-								btObj.className = "daWinBt";
-								btObj.href = "javascript:void(0)";
-								btObj.innerHTML = [
-									'<div class="l"></div>',
-									'<div class="txt">', caption, '</div>',
-									'<div class="r"></div>'
-								].join("");
-								
-								(function(caption){
-										da( btObj ).bind( "click", function( evt ){
-											if( da.isFunction( button[caption] ) )
-												button[caption].call( this, context, evt );
-												
-											evt.stopPropagation();					//阻止事件冒泡。因为点击按钮时，会触发setActive,如果窗口销毁了，那么这里再触发setActive也没什么意义
-										});
-								})(caption);
-								
-								btBar.insertBefore( btObj, null );
-								dwDlgBts.push( btObj );
-							}
-					}
-					else{
-						this[ this.setting.type ]( btBar );
-					}
-					
-					
-					var cs = this.dwCssSize,
-							TandB_h = (cs.t_h+ cs.b_h),				//上下边框高度
-							LandR_w = (cs.l_w+ cs.r_w);				//左右边框高度
+							(function(caption){
+									da( btObj ).bind( "click", function( evt ){
+										if( da.isFunction( button[caption] ) )
+											button[caption].call( this, context, evt );
+											
+										evt.stopPropagation();					//阻止事件冒泡。因为点击按钮时，会触发setActive,如果窗口销毁了，那么这里再触发setActive也没什么意义
+									});
+							})(caption);
+							
+							btBar.insertBefore( btObj, null );
+							dwDlgBts.push( btObj );
+						}
+				}
+				else{
+					this[ this.setting.type ]( btBar );
+				}
+				
+				
+				var cs = this.dwCssSize,
+					TandB_h = (cs.t_h+ cs.b_h),				//上下边框高度
+					LandR_w = (cs.l_w+ cs.r_w);				//左右边框高度
 
-					this.dwSize.w = ( 0 === this.dwSize.w ) ? da( dwDialog ).width() + LandR_w : this.dwSize.w; 
-					this.dwSize.h = ( 0 === this.dwSize.h ) ? da( dwDialog ).height() + TandB_h : this.dwSize.h;
-					
-	
+				this.dwSize.w = ( 0 === this.dwSize.w ) ? 
+					da( dwDialog ).width() + LandR_w : 
+					this.dwSize.w; 
+				this.dwSize.h = ( 0 === this.dwSize.h ) ? 
+					da( dwDialog ).height() + TandB_h + 30 : 		//+30是按钮条的位置
+					this.dwSize.h;
+				
+				if( 300 > this.dwSize.w ) this.dwSize.w = 300;
+				if( 150 > this.dwSize.h ) this.dwSize.h = 150;
+				
 			}
 			else{
-					dwDialog.style.display = "none";
-					dwIframe.style.display = "none";
-					
-					this.isLoading = true;
-					this.setStatus("LOADING..");
-					this.daFrameObj = daFrame({
-						window: win,
-						width: nWidth,
-						height: nHeight,
-						parent: dwIframe.parentNode,
-						border: "0px",
-						url: setting.url,
-						load: function(){
-							context.isLoading = false;
-							context.setStatus("");
-							
-							if(context.isActiving)																									//如果是当前活动窗口并已经加载完毕，就撤销遮罩层
-								context.dwLoadover.style.display = "none";
-								
-							context.insideWinObj = this;																						//获得并缓存内页window对象
-							if( context.setting.load )
-								context.setting.load.apply( this, arguments );											//内页加载完毕 如果需要回调处理，就触发回调
-						},
-						back: function(){
-							if( context.setting.back )
-								context.setting.back.apply( this, arguments );										//内页数据返回 如果需要回调处理，就触发回调
-							if( context.setting.backclose ) context.close();
-						},
-						close: function(){
-							context.close();
-						},
+				dwDialog.style.display = "none";
+				dwIframe.style.display = "none";
+				
+				this.isLoading = true;
+				this.setStatus("LOADING..");
+				this.daFrameObj = daFrame({
+					window: win,
+					width: nWidth,
+					height: nHeight,
+					parent: dwIframe.parentNode,
+					border: "0px",
+					url: setting.url,
+					load: function(){
+						context.isLoading = false;
+						context.setStatus("");
 						
-						unload: function(){																												//内页
-							//TODO:
-						}
-					});
+						if(context.isActiving)																									//如果是当前活动窗口并已经加载完毕，就撤销遮罩层
+							context.dwLoadover.style.display = "none";
+							
+						context.insideWinObj = this;																						//获得并缓存内页window对象
+						if( context.setting.load )
+							context.setting.load.apply( this, arguments );											//内页加载完毕 如果需要回调处理，就触发回调
+					},
+					back: function(){
+						if( context.setting.back )
+							context.setting.back.apply( this, arguments );										//内页数据返回 如果需要回调处理，就触发回调
+						if( context.setting.backclose ) context.close();
+					},
+					close: function(){
+						context.close();
+					},
 					
-					
-					this.dwLoadover.style.display = "block";
-					this.dwLoadover.style.width = nWidth + "px";			//loading遮罩
-					this.dwLoadover.style.height = nHeight + "px";
+					unload: function(){																												//内页
+						//TODO:
+					}
+				});
+				
+				
+				this.dwLoadover.style.display = "block";
+				this.dwLoadover.style.width = nWidth + "px";			//loading遮罩
+				this.dwLoadover.style.height = nHeight + "px";
 			}
 	
 		},	
@@ -1980,6 +1991,9 @@ function error( html, fnOK ){
 		yes: fnOK
 	});
 }
+
+/*** confirm原型扩展 ***/
+var confirm2 = window.confirm;
 
 function confirm( html, fnOK, fnCancel ){
 	daWin({

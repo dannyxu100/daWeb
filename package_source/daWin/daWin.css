@@ -7,7 +7,7 @@
 	position:fixed; left:200px; top:100px;/*background:#f00;*/
 }
 .daWin .daWinBtBar{
-	height:23px;text-align:center;padding-top:10px;
+	position:absolute; right:0px; bottom:0px; height:23px;text-align:center;padding-top:10px;
 }
 .daWin .daWinBtBar .daWinBt{ display:inline-block;margin:0px 5px;color:#333;text-decoration:none; cursor:pointer;}
 .daWin .daWinBtBar .daWinBt:hover{ color:#fff;}

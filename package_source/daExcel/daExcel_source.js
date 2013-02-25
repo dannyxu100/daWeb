@@ -241,8 +241,8 @@ var daExcel = (function(){
 				// opacity: 1,
 				top: pos.top,
 				left: pos.left,
-				width: da.browser.ie ? da_tdObj.width() : da_tdObj.width(),
-				height: da.browser.ie ? da_tdObj.height() : da_tdObj.height()
+				width: da.browser.ie ? da_tdObj.outerWidth() : da_tdObj.outerWidth(),
+				height: da.browser.ie ? da_tdObj.outerHeight() : da_tdObj.outerHeight()
 			},{
 				duration: 100,
 				easing: "easeOutQuad"
@@ -251,8 +251,8 @@ var daExcel = (function(){
 		}
 		else{
 			daExcel.focusObj.offset( pos );
-			daExcel.focusObj.width( da.browser.ie ? da_tdObj.width() +2 : da_tdObj.width() );
-			daExcel.focusObj.height( da.browser.ie ? da_tdObj.height()+2 : da_tdObj.height() );
+			daExcel.focusObj.width( da.browser.ie ? da_tdObj.outerWidth() +2 : da_tdObj.outerWidth() );
+			daExcel.focusObj.height( da.browser.ie ? da_tdObj.outerHeight()+2 : da_tdObj.outerHeight() );
 		}
 		
 		

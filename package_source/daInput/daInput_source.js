@@ -13,7 +13,7 @@ var daInput = (function(){
 	*/
 	var daInput = function( setting ){
 		if( da.isFunction( setting ) || "string" === typeof setting )						//遍历和查找daInput控件的高级快捷用法
-			return daInput.getInput( setting );
+			return daInput.get( setting );
 			
 		return new daInput.fnStruct.init( setting );
 	};
@@ -21,12 +21,12 @@ var daInput = (function(){
 	daInput.fnStruct = daInput.prototype = {
 		version: "daInput v1.0 \n author: danny.xu \n date: 2011-8-14 9:10:54",
 		
-		iId: 0,
-		iObj: null,
-		iParentObj: null,
+		id: 0,
+		obj: null,
+		parentObj: null,
 		
-		iTextObj: null,
-		iIconObj: null,
+		inputObj: null,
+		iconObj: null,
 		
 		daGifObj: null,
 		
@@ -39,7 +39,7 @@ var daInput = (function(){
 			height: "24px",
 			
 			style: "",
-			className: "editbox",
+			className: "editBox",
 			icon: "edit",								//[ "dialog", "date", "list" ]
 			
 			isTextarea: false,
@@ -69,68 +69,68 @@ var daInput = (function(){
 		init: function( setting ){
 			setting = this.setting = da.extend( {}, this.setting, setting );
 			
-			this.iParentObj = da( setting.parent );
-			this.iParentObj = 0 < this.iParentObj.dom.length ? this.iParentObj.dom[0] : doc.body;
+			this.parentObj = da( setting.parent );
+			this.parentObj = 0 < this.parentObj.dom.length ? this.parentObj.dom[0] : doc.body;
 			
 			if( setting.id )
-				this.iId = setting.id;
+				this.id = setting.id;
 			else 
-				//this.iId = da.nowId();					//在ie里面好像不怎么行啊~
-				while( null !== doc.getElementById( "daInput_" + this.iId ) ) this.iId++;						//保证id 唯一性
+				//this.id = da.nowId();					//在ie里面好像不怎么行啊~
+				while( null !== doc.getElementById( "daInput_" + this.id ) ) this.id++;						//保证id 唯一性
 			
 			
 			this.create();
 			this.bindEvent();
 			this.reSize();
 			
-			daInput.pushCache( this );
+			daInput.cache( this );
 			
 		},
 		
 		create: function(){
 			var setting = this.setting,
-					id = "daInput_" + this.iId,
-					iObj, iTextObj, iIconObj;
+				id = "daInput_" + this.id,
+				obj, inputObj, iconObj;
 					
-			iObj = doc.createElement("span");
-			iObj.id = id;
-			iObj.className = [ setting.css.daInput, setting.className ].join(" ");
-			if( setting.style ) iObj.style.cssText = setting.style;
-			this.iParentObj.insertBefore( iObj, setting.target );
-			this.iObj = iObj;
+			obj = doc.createElement("span");
+			obj.id = id;
+			obj.className = [ setting.css.daInput, setting.className ].join(" ");
+			if( setting.style ) obj.style.cssText = setting.style;
+			this.parentObj.insertBefore( obj, setting.target );
+			this.obj = obj;
 			
 			if( setting.target && setting.target.nodeType ){
-				iObj.insertBefore( setting.target );
-				this.iTextObj = setting.target;
+				obj.insertBefore( setting.target );
+				this.inputObj = setting.target;
 			}
 			else{
 				if( setting.isTextarea )
-					iTextObj = doc.createElement("textarea");
+					inputObj = doc.createElement("textarea");
 				else
-					iTextObj = doc.createElement("input");
+					inputObj = doc.createElement("input");
 					
-				iTextObj.id = setting.id ? setting.id : id + "_text";
-				if( setting.isDisabled ) iTextObj.setAttribute( "disabled", "disabled" );
-				if( setting.isReadonly ) iTextObj.setAttribute( "readonly", "readyonly" );
-				if( setting.source ) iTextObj.setAttribute( "source", setting.source );
-				if( setting.invalid ) iTextObj.setAttribute( "invalid", setting.invalid );
-				if( setting.onvalid ) iTextObj.setAttribute( "onvalid", setting.onvalid );
+				inputObj.id = setting.id ? setting.id : id + "_text";
+				if( setting.isDisabled ) inputObj.setAttribute( "disabled", "disabled" );
+				if( setting.isReadonly ) inputObj.setAttribute( "readonly", "readyonly" );
+				if( setting.source ) inputObj.setAttribute( "source", setting.source );
+				if( setting.invalid ) inputObj.setAttribute( "invalid", setting.invalid );
+				if( setting.onvalid ) inputObj.setAttribute( "onvalid", setting.onvalid );
 				
-				iObj.insertBefore( iTextObj );
-				this.iTextObj = iTextObj;
+				obj.insertBefore( inputObj );
+				this.inputObj = inputObj;
 			}
 			
 			if( !setting.isTextarea ){
-				iIconObj = doc.createElement("span");
-				iIconObj.id = id + "_icon";
-				iIconObj.className = setting.icon;
-				iIconObj.style.cssText = "display:none";
+				iconObj = doc.createElement("span");
+				iconObj.id = id + "_icon";
+				iconObj.className = setting.icon;
+				iconObj.style.cssText = "display:none";
 	
 				if( setting.image )
-					iIconObj.style.backgroundImage = "url("+ setting.image +")";
+					iconObj.style.backgroundImage = "url("+ setting.image +")";
 				
-				iObj.insertBefore( iIconObj );
-				this.iIconObj = iIconObj;
+				obj.insertBefore( iconObj );
+				this.iconObj = iconObj;
 			}
 			
 		},
@@ -140,7 +140,7 @@ var daInput = (function(){
 					setting = this.setting;
 			
 			if( !setting.isTextarea ){
-					da( this.iIconObj ).bind( "click", function(){										//小图标对象单击事件
+					da( this.iconObj ).bind( "click", function(){										//小图标对象单击事件
 						if( da.isFunction( context.setting.click ) )
 							context.setting.click.call( this );
 						
@@ -148,7 +148,7 @@ var daInput = (function(){
 					});
 			}
 			
-			da( this.iObj ).bind( "dblclick", function(){
+			da( this.obj ).bind( "dblclick", function(){
 				if( da.isFunction( context.setting.dblclick ) )									//daInput双击事件事件
 					context.setting.dblclick.call( this );
 				daInput.run[ setting.icon ]( context, true );
@@ -157,13 +157,13 @@ var daInput = (function(){
 				context.reSize();
 				if( !context.setting.isDisabled ){
 					try{
-						context.iTextObj.focus();
+						context.inputObj.focus();
 					}catch(e){};
 				}
 			});
 			
 			
-			da( this.iTextObj ).bind( "focus click", function( evt ){					//输入框对象绑定事件
+			da( this.inputObj ).bind( "focus click", function( evt ){					//输入框对象绑定事件
 				evt.stopPropagation();
 				context.iconShow();
 				
@@ -184,10 +184,10 @@ var daInput = (function(){
 			
 			if( "undefined" === typeof daKey ) return;													//输入框按键事件
 			daKey({
-				target: this.iTextObj,
+				target: this.inputObj,
 				keydown: function( key, isCtrl, isAlt, isShift ){
 					if( da.isFunction( setting.keyup ) )
-						setting.keyup.call( context.iTextObj, key, isCtrl, isAlt, isShift );
+						setting.keyup.call( context.inputObj, key, isCtrl, isAlt, isShift );
 					
 						switch( setting.icon ){
 							case "dialog":
@@ -208,8 +208,8 @@ var daInput = (function(){
 								else if( "Enter" === key ){
 									var res = context.daListObj.get();
 									if( res ){
-										context.iTextObj.value = res.text;
-										context.iTextObj.setAttribute( "code", res.value );
+										context.inputObj.value = res.text;
+										context.inputObj.setAttribute( "code", res.value );
 									}
 									context.daListObj.hide();
 								}
@@ -228,23 +228,23 @@ var daInput = (function(){
 		/**显示功能小图标
 		*/
 		iconShow: function(){
-			this.iObj.style.backgroundColor = this.setting.hoverColor;
+			this.obj.style.backgroundColor = this.setting.hoverColor;
 			this.reSize();
 			
 			if( this.setting.isTextarea ) return;
 			
 			if( "undefined" !== typeof daFx ){
-				da( this.iIconObj ).stop(true,true);
+				da( this.iconObj ).stop(true,true);
 				
 				if( "undefined" !== typeof daGif ){
-					this.iIconObj.style.display = "inline-block";
+					this.iconObj.style.display = "inline-block";
 					
 					if( this.daGifObj ){
 						this.daGifObj.play();
 					}
 					else{
 						this.daGifObj = daGif({
-							target: this.iIconObj,
+							target: this.iconObj,
 							all: 5,
 							speed: 15,
 							top: daInput.IconTopHash[ this.setting.icon ],
@@ -254,32 +254,32 @@ var daInput = (function(){
 					}
 				}
 				else{
-					da( this.iIconObj ).fadeIn( 300 );
+					da( this.iconObj ).fadeIn( 300 );
 				}
 			}
 			else
-				this.iIconObj.style.display = "block";
+				this.iconObj.style.display = "block";
 				
 		},
 		
 		/**隐藏功能小图标
 		*/
 		iconHide: function(){
-			this.iObj.style.backgroundColor = "";
+			this.obj.style.backgroundColor = "";
 				
 			if( this.setting.isTextarea ) return;
 			
 			if( "undefined" !== typeof daFx ){
-				da( this.iIconObj ).stop(true,true);
+				da( this.iconObj ).stop(true,true);
 				
 				if( "undefined" !== typeof daGif ){
 					if( this.daGifObj ) this.daGifObj.stop();
 				}
 				
-				da( this.iIconObj ).fadeOut( 300 );
+				da( this.iconObj ).fadeOut( 300 );
 			}
 			else
-				this.iIconObj.style.display = "none";
+				this.iconObj.style.display = "none";
 				
 		},
 		
@@ -287,18 +287,18 @@ var daInput = (function(){
 			var setting = this.setting,
 					wText, hText;
 					
-			da(this.iObj).width( setting.width );
-			da(this.iObj).height( setting.height );
+			da(this.obj).width( setting.width );
+			da(this.obj).height( setting.height );
 			
-			wText = da(this.iObj).width();
-//			hText = da(this.iTextObj).height();
+			wText = da(this.obj).width();
+//			hText = da(this.inputObj).height();
 			
 			if( setting.isTextarea ) 
-				da(this.iTextObj).width( "100%" );
+				da(this.inputObj).width( "100%" );
 			else 
-				da(this.iTextObj).width( wText - ( setting.isTextarea ? 2 : 22) );
+				da(this.inputObj).width( wText - ( setting.isTextarea ? 2 : 22) );
 				
-			da(this.iTextObj).height( setting.height );
+			da(this.inputObj).height( setting.height );
 		}
 		
 	};
@@ -314,45 +314,23 @@ var daInput = (function(){
 		list: "-48px"
 	};
 
-	/**daInput全局缓存
-	*/
-	daInput.daInputCache = [];
-	
 	/**缓存daInput控件对象
 	* params {daInput} obj 下拉控件daInput对象
 	*/
-	daInput.pushCache = function( obj ){
-		var cache = daInput.daInputCache;
-		cache.push({
-			id: obj.sId,
-			obj: obj
-		});
+	daInput.cache = function( obj ){
+		da._data( obj.inputObj, "daInput", obj );
 		
 	};
 	
 	/**查找相应id的daInput控件对象
 	* params {string} id 下拉控件对象id
 	*/
-	daInput.getInput = function( id ){
-		var cache = daInput.daInputCache;
+	daInput.get = function( id ){
+		if( "string" === typeof id && 0 !== id.indexOf("#") ) id = "#" + id;				//修正id未加"#"
 		
-		if( "string" === typeof id ){
-			id = id.replace( "#", "" );
-			
-			for( var i=0,len=cache.length; i<len; i++ ){
-				if( id == cache[i].id ) return cache[i].obj;
-			}
-			
-			return null;
-		}
-		else if( da.isFunction( id ) ){
-			da.each( cache, function( idx, obj ){
-				return id.call( this.obj, this.id );
-			});
-			
-			return cache;
-		}
-		
+		var obj = da(id);
+		if( 0 >= obj.dom.length ) return null;
+		return da._data( obj.dom[0], "daInput" );
 		
 	};
 	
@@ -360,7 +338,7 @@ var daInput = (function(){
 	
 	/**将普通input 转换为daInput控件
 	*/
-	daInput.toInput = function( objInput ){
+	daInput.convert = function( objInput ){
 		var eventObjs = {}, eventType = "",
 				style = objInput.style.cssText,
 				w = da( objInput ).css("width"),
@@ -399,7 +377,7 @@ var daInput = (function(){
 		
 		var daInputObj = daInput( params );																//生成daButton对象并替换input控件
 		
-//		objInput.parentNode.replaceChild( daInputObj.iObj, objInput );
+//		objInput.parentNode.replaceChild( daInputObj.obj, objInput );
 		
 	};
 	
@@ -440,25 +418,25 @@ var daInput = (function(){
 			else if( isShow ){
 				if( "undefined" === typeof daList ) return;																	//创建daList对象
 				obj.daListObj = daList({
-					target: obj.iObj,
-					width: da( obj.iObj ).width(),
+					target: obj.obj,
+					width: da( obj.obj ).width(),
 					click: function( res ){
-						obj.iTextObj.value = res.text;
-						obj.iTextObj.setAttribute( "code", res.value );
-						da( obj.iTextObj ).change();
-						obj.iTextObj.select();
+						obj.inputObj.value = res.text;
+						obj.inputObj.setAttribute( "code", res.value );
+						da( obj.inputObj ).change();
+						obj.inputObj.select();
 						this.hide();
 					}
 				});
 
-				daInput.getListSource( obj.iTextObj.getAttribute( "source" ), function( data1 ){
+				daInput.getListSource( obj.inputObj.getAttribute( "source" ), function( data1 ){
 					obj.daListObj.setList( data1 );
 				});
 			}
 		},
 		
 		date: function( obj, isShow ){
-			var d = obj.iTextObj.getAttribute( "onvalid" ) || obj.iTextObj.getAttribute( "source" );
+			var d = obj.inputObj.getAttribute( "onvalid" ) || obj.inputObj.getAttribute( "source" );
       if ( 0 > d.indexOf("isdate(") ) return;
       
 			if( obj.daCalendarObj ){
@@ -466,18 +444,18 @@ var daInput = (function(){
 			}
 			else if( isShow ){																												//创建daCalendar对象
 				obj.daCalendarObj = daCalendar({
-					target: obj.iObj,
+					target: obj.obj,
 					isSelector: true,
 					cellEvent: {
 						"click": function( evt ){
-								obj.iTextObj.value = obj.daCalendarObj.getDate( this ).date.format("yyyy-MM-dd");
-								obj.iTextObj.select();
+								obj.inputObj.value = obj.daCalendarObj.getDate( this ).date.format("yyyy-MM-dd");
+								obj.inputObj.select();
 								obj.daCalendarObj.hide();
 						}
 					},
 					clickToday: function(){
-						obj.iTextObj.value = (new Date()).format("yyyy-MM-dd");
-						obj.iTextObj.select();
+						obj.inputObj.value = (new Date()).format("yyyy-MM-dd");
+						obj.inputObj.select();
 						obj.daCalendarObj.hide();
 					},
 					clickPrev: function(){
@@ -498,11 +476,11 @@ var daInput = (function(){
 		},
 		
 		dialog: function( obj ){
-			var fn = obj.iTextObj.getAttribute( "source" ) || obj.iTextObj.getAttribute( "onvalid" );
+			var fn = obj.inputObj.getAttribute( "source" ) || obj.inputObj.getAttribute( "onvalid" );
 			if( fn ){
 				fn = fn.replace( /\(this/g, "( arguments[0]" );
 				fn = new Function( fn );
-				fn( obj.iTextObj );
+				fn( obj.inputObj );
 			}
 		}
 	};
@@ -518,7 +496,7 @@ win.daInput = daInput;
 ////加载JS脚本的时候，替换页面上所有的input button类型的按钮为 daButton类型
 //da(function(){
 //	da("input:text,textarea").each(function( idx, obj ){
-//		daInput.toInput( this );																		//转换
+//		daInput.convert( this );																		//转换
 //	
 //	});
 //
@@ -571,7 +549,7 @@ daInput.getListSource = function( source, fn ){
 //	*/
 //	jQuery.fn.Autocomplete = function( setting ){
 //		this.each(function( i, obj ){
-//			daInput.toInput( this );												//转换为daInput控件
+//			daInput.convert( this );												//转换为daInput控件
 //		});
 //	};
 //}

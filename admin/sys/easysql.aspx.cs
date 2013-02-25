@@ -65,7 +65,8 @@ public partial class admin_sys_sqlmanage_easysql : System.Web.UI.Page
     {
         if (null == Request["sqlname"])              //(1)数据库表名。(2)自定义sql代码名称。
         {
-            return;
+            Response.Write("error:没有提交sqlname参数");
+            Response.End();
         }
         else
         {
@@ -216,6 +217,11 @@ public partial class admin_sys_sqlmanage_easysql : System.Web.UI.Page
                 arrName.Add(name);
                 arrParam.Add(_dbhelper.getSqlParam(rowCur, value));   //验证并添加 sql赋值参数
             }
+        }
+
+        if ( !isIdentPK && "" == pkName ) {
+            Response.Write("error:需要提交主键值");
+            Response.End();
         }
 
         sqltext.Append("insert into " + _sqlname + "(");

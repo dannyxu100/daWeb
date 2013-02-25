@@ -95,14 +95,14 @@ var daFrame = (function(){
 			this.create();
 			this.setSize();
 			if( "" != setting.url || "" != setting.src )
-				this.loading();																								//启动loading动画
+				this.loading();								//启动loading动画
 			
-			da.timer.call( this, 30, function(){														//防止看不见loading
+			// da.timer.call( this, 30, function(){			//防止看不见loading
 				this.setCnt();
 				this.bindEvent();
-			});
+			// },);
 			
-			if( setting.shandow )																		//内阴影
+			if( setting.shandow )							//内阴影
 				daFrame.shandowborder( this.cntMainObj, setting.shandow );
 		},
 		
@@ -795,7 +795,8 @@ var daFrame = (function(){
 			if( bHide ){
 				this.cntOverObj.style.display = "none";
 			}
-			if( !this.setting.loading ) return;
+			if( !this.setting.loading || "undefined" == typeof daLoading ) return;
+			
 			if( bHide ){
 				this.cntLoadingObj.finished();		//结束loading动画
 			}

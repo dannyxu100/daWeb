@@ -70,7 +70,7 @@
 				arrTmp.push( res.substr(idx-3) );
 			};
 			
-			res = arrTmp.join("?");
+			res = arrTmp.join(",");
 		};
 			
 		return da.isNull( res, 0.00);
@@ -1304,6 +1304,10 @@
 			
 			getSetAttribute: div.className !== "t",			//如果是IE，可以通过驼峰格式值设置属性,这时候在今后的属性操作时就要进行兼容处理了。
 			
+			// Makes sure cloning an html5 element does not cause problems
+			// Where outerHTML is undefined, this still works
+			html5Clone: document.createElement("nav").cloneNode( true ).outerHTML !== "<:nav></:nav>",
+			
 			boxModel: null,									//盒子模型支持
 			inlineBlockNeedsLayout: false,					//inline-block支持
 			shrinkWrapBlocks: false,						//拆封块支持
@@ -1440,7 +1444,7 @@
 	// Keep track of boxModel
 	da.boxModel = da.support.boxModel;
 	
-})(da);	
+})(da);
 
 /***************** Data  ***************************/
 /*
@@ -2262,7 +2266,8 @@
 	version: 1.0.0
 */
 (function(da){
-	var daRe_typenamespace = /^([^\.]*)?(?:\.(.+))?$/,
+	var daRe_formElems = /^(?:textarea|input|select)$/i,
+		daRe_typenamespace = /^([^\.]*)?(?:\.(.+))?$/,
 		// daRe_namespaces = /\.(.*)$/,
 		daRe_hoverHack = /(?:^|\s)hover(\.\S+)?\b/,
 		daRe_keyEvent = /^key/,
@@ -3089,7 +3094,7 @@
 	if ( !da.support.changeBubbles ) {
 		da.event.special.change = {
 			setup: function() {
-				if ( rformElems.test( this.nodeName ) ) {
+				if ( daRe_formElems.test( this.nodeName ) ) {
 					// IE doesn't fire change on a check/radio until blur; trigger it on click
 					// after a propertychange. Eat the blur-change in special.change.handle.
 					// This still fires onchange a second time for check/radio after blur.
@@ -3112,7 +3117,7 @@
 				da.event.add( this, "beforeactivate._change", function( e ) {
 					var elem = e.target;
 
-					if ( rformElems.test( elem.nodeName ) && !elem._change_attached ) {
+					if ( daRe_formElems.test( elem.nodeName ) && !elem._change_attached ) {
 						da.event.add( elem, "change._change", function( event ) {
 							if ( this.parentNode && !event.isSimulated && !event.isTrigger ) {
 								da.event.simulate( "change", this.parentNode, event, true );
@@ -3135,7 +3140,7 @@
 			teardown: function() {
 				da.event.remove( this, "._change" );
 
-				return rformElems.test( this.nodeName );
+				return daRe_formElems.test( this.nodeName );
 			}
 		};
 	}
@@ -5059,6 +5064,10 @@ var daRe_until = /Until$/,
 		
 		daRe_nocache = /<(?:script|object|embed|option|style)/i,	//?????????
 		daRe_checked = /checked\s*(?:[^=]|=\s*.checked.)/i,
+		
+		nodeNames = "abbr|article|aside|audio|bdi|canvas|data|datalist|details|figcaption|figure|footer|" +
+		"header|hgroup|mark|meter|nav|output|progress|section|summary|time|video",
+		daRe_noshimcache = new RegExp("<(?:" + nodeNames + ")[\\s/>]", "i"),
 
 		
 		daWrapMap = {												//元素包裹映射表
@@ -5267,7 +5276,7 @@ var daRe_until = /Until$/,
 					results = { fragment: parent };
 	
 				} else {
-					results = da.buildFragment( args, this, scripts );
+					results = da.buildFragment( args, this.dom, scripts );
 				}
 	
 				fragment = results.fragment;
@@ -5305,20 +5314,26 @@ var daRe_until = /Until$/,
 		}
 	});
 
-	/*
+	function root( elem, cur ) {
+		return da.isNodeName(elem, "table") ?
+			(elem.getElementsByTagName("tbody")[0] ||
+			elem.appendChild(elem.ownerDocument.createElement("tbody"))) :
+			elem;
+	}
+	
 	function findOrAppend( elem, tag ) {
 		return elem.getElementsByTagName( tag )[0] || elem.appendChild( elem.ownerDocument.createElement( tag ) );
 	}
 
 	function cloneCopyEvent( src, dest ) {
 
-		if ( dest.nodeType !== 1 || !jQuery.hasData( src ) ) {
+		if ( dest.nodeType !== 1 || !da.hasData( src ) ) {
 			return;
 		}
 
 		var type, i, l,
-			oldData = jQuery._data( src ),
-			curData = jQuery._data( dest, oldData ),
+			oldData = da._data( src ),
+			curData = da._data( dest, oldData ),
 			events = oldData.events;
 
 		if ( events ) {
@@ -5327,14 +5342,14 @@ var daRe_until = /Until$/,
 
 			for ( type in events ) {
 				for ( i = 0, l = events[ type ].length; i < l; i++ ) {
-					jQuery.event.add( dest, type, events[ type ][ i ] );
+					da.event.add( dest, type, events[ type ][ i ] );
 				}
 			}
 		}
 
 		// make the cloned public data object a copy from the original
 		if ( curData.data ) {
-			curData.data = jQuery.extend( {}, curData.data );
+			curData.data = da.extend( {}, curData.data );
 		}
 	}
 
@@ -5366,15 +5381,7 @@ var daRe_until = /Until$/,
 		if ( nodeName === "object" ) {
 			dest.outerHTML = src.outerHTML;
 
-			// This path appears unavoidable for IE9. When cloning an object
-			// element in IE9, the outerHTML strategy above is not sufficient.
-			// If the src has innerHTML and the destination does not,
-			// copy the src.innerHTML into the dest.innerHTML. #10324
-			if ( jQuery.support.html5Clone && (src.innerHTML && !jQuery.trim(dest.innerHTML)) ) {
-				dest.innerHTML = src.innerHTML;
-			}
-
-		} else if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
+		} else if ( nodeName === "input" && (src.type === "checkbox" || src.type === "radio") ) {
 			// IE6-8 fails to persist the checked state of a cloned checkbox
 			// or radio button. Worse, IE6-7 fail to give the cloned element
 			// a checked appearance if the defaultChecked value isn't also set
@@ -5405,14 +5412,13 @@ var daRe_until = /Until$/,
 
 		// Event data gets referenced instead of copied if the expando
 		// gets copied too
-		dest.removeAttribute( jQuery.expando );
+		dest.removeAttribute( da.expando );
 
 		// Clear flags for bubbling special change/submit events, they must
 		// be reattached when the newly cloned events are first activated
 		dest.removeAttribute( "_submit_attached" );
 		dest.removeAttribute( "_change_attached" );
 	}
-	*/
 	
 	//文档片段缓存区
 	da.fragments = {};
@@ -5424,34 +5430,43 @@ var daRe_until = /Until$/,
 		scripts: 脚本片段
 	*/
 	da.buildFragment = function( args, nodes, scripts ) {
-		var fragment, cacheAble, cacheResults,
-			docTmp = (nodes && nodes[0] ? nodes[0].ownerDocument || nodes[0] : doc);
-	
-		if ( args.length === 1 
-		&& typeof args[0] === "string" 
-		&& args[0].length < 512 																							//只缓存0.5KB 的HTML代码片段
-		&& docTmp === doc 																										//只缓存与当前Document相关的HTML代码片段
-		&& args[0].charAt(0) === "<" 
-		&& !daRe_nocache.test( args[0] ) 																			//IE6 不能正确的克隆文档片段中option元素的selected选中状态属性，object和embed也会出问题，所以不缓存了。
-		&& (da.support.checkClone || !daRe_checked.test( args[0] )) ) {				//WebKit浏览器在文档片段中，克隆元素时，不能正确的复制checked状态属性，所以不缓存了。
-			cacheAble = true;
-	
-			cacheResults = da.fragments[ args[0] ];															//查找文档片段缓存区，返回缓存
-			if ( cacheResults && cacheResults !== 1 ) {
-				fragment = cacheResults;
+		var fragment, cacheable, cacheresults, doc,
+			first = args[ 0 ];
+
+		if ( nodes && nodes[0] ) {
+			doc = nodes[0].ownerDocument || nodes[0];
+		}
+
+		if ( !doc.createDocumentFragment ) {
+			doc = document;
+		}
+
+		if ( args.length === 1 && 
+			typeof first === "string" && 
+			first.length < 512 && 										//只缓存0.5KB 的HTML代码片段
+			doc === document &&											//只缓存与当前Document相关的HTML代码片段
+			first.charAt(0) === "<" && !daRe_nocache.test( first ) &&	//IE6 不能正确的克隆文档片段中option元素的selected选中状态属性，object和embed也会出问题，所以不缓存了。
+			(da.support.checkClone || !daRe_checked.test( first )) &&	//WebKit浏览器在文档片段中，克隆元素时，不能正确的复制checked状态属性，所以不缓存了。
+			(da.support.html5Clone || !daRe_noshimcache.test( first )) ) {
+
+			cacheable = true;
+
+			cacheresults = da.fragments[ first ];
+			if ( cacheresults && cacheresults !== 1 ) {
+				fragment = cacheresults;
 			}
 		}
-	
-		if ( !fragment ) {																										//没有缓存过文档片段，就生产文档片段
-			fragment = docTmp.createDocumentFragment();
-			da.clean( args, docTmp, fragment, scripts );												//生产出来的文档片段需要通过da.clean()函数修正清理一下
+
+		if ( !fragment ) {				//没有缓存过文档片段，就生产文档片段
+			fragment = doc.createDocumentFragment();
+			da.clean( args, doc, fragment, scripts );			//生产出来的文档片段需要通过da.clean()函数修正清理一下
 		}
-	
-		if ( cacheAble ) {																									  //对文档片段缓存set操作
-			da.fragments[ args[0] ] = cacheResults ? fragment : 1;
+
+		if ( cacheable ) {				//对文档片段缓存set操作
+			da.fragments[ first ] = cacheresults ? fragment : 1;
 		}
-	
-		return { fragment: fragment, cacheAble: cacheAble };									//返回文档片段
+
+		return { fragment: fragment, cacheable: cacheable };	//返回文档片段
 	};
 
 	//扩展部分添加、插入等特殊功能的DOM对象操作函数
@@ -5752,7 +5767,7 @@ var daRe_until = /Until$/,
 	
 	
 })(da);
-	
+
 /***************** CSS *****************/
 /*
 	author:	danny.xu
@@ -8042,13 +8057,14 @@ da.extend({
 		
 		if ( "string" === typeof obj && 0 >= daObj.dom.length ){			//需要通过name来定位，如:checkbox、radio
 			var arr = obj.split(",");
+			
 			for( var i=0,len=arr.length; i<len; i++ ){
-				arr[i] = "input[name="+ arr[i].trim() +"]";
+				arr[i] = "input[name="+ arr[i].replace("#","").trim() +"]";
 			}
 			daObj = da( arr.join(",") );
 		};
 		
-		var tag, fmt, val2;
+		var tag, fmt, curVal;
 		
 		daObj.each(function(i){
 			tag = this.tagName.toLowerCase();			//元素类型
@@ -8059,14 +8075,27 @@ da.extend({
 					switch(type){
 						case "checkbox":							//复选控件
 						case "radio":{								//单选控件
-							val2 = da.isNull(this.value, "");
+						debugger;
+							curVal = da.isNull(this.value, "");
 							
-							if ( val2 == "" || val2 == "on" ) {				//特殊值互等 "" == "on" == 0
-								this.setAttribute( "checked", val == "0" );
+							var tmpObj = da._data( this, "daOption" );	//判断是否引用了daOption封装类
+							if( tmpObj ){								//如果引用了daOption，就用check函数设置
+								if ( "" == curVal || "on" == curVal ) {	//特殊值互等("" == "on" == 0)
+									tmpObj.check( "0" == val || true == val || "true" == val );
+								}
+								else {
+									tmpObj.check( val == da.isNull(this.value, "") );
+								};
 							}
-							else {
-								this.setAttribute( "checked", val == da.isNull(this.value, "") );
-							};
+							else{
+								if ( "" == curVal || "on" == curVal ) {	//特殊值互等 "" == "on" == 0
+									this.setAttribute( "checked", "0" == val );
+								}
+								else {
+									this.setAttribute( "checked", val == da.isNull(this.value, "") );
+								};
+							}
+							
 							break;
 						}
 						case "text":								//单行输入框
@@ -8074,11 +8103,11 @@ da.extend({
 							fmt = da.isNull( this.getAttribute("fmt"), "" );
 							
 							if( "" !== fmt ){
-								val2 = da.fmtData( val, fmt );
+								val = da.fmtData( val, fmt );
 							}
 							
-							val2 = da.isNull( val2, this.value );
-							this.value = val2;
+							val = da.isNull( val, this.value );
+							this.value = val;
 							break;
 						}
 					}
@@ -8088,11 +8117,11 @@ da.extend({
 					fmt = da.isNull( this.getAttribute("fmt"), "" );
 					
 					if( "" !== fmt ){
-						val2 = da.fmtData( val, fmt );
+						val = da.fmtData( val, fmt );
 					}
 					
-					val2 = da.isNull( val2, this.value );
-					this.value = val2;
+					val = da.isNull( val, this.value );
+					this.value = val;
 					break;
 				}
 				case "select":{
@@ -8281,5 +8310,3 @@ var $value = da.setValue,
 	runsql = da.getData,
 	runsql4text = da.getData,
 	runsql4xml = da.getData;
-
-
